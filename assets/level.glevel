@@ -1,0 +1,79 @@
+{
+    "version": 1,
+    "globalProperties": {},
+    "entities": [
+        {
+            "type": "Entity",
+            "properties": {
+                "state": "active",
+                "position": [
+                    200.0,
+                    30.0
+                ],
+                "rotation": 1.5707963705062867,
+                "scale": 10.0
+            },
+            "components": [
+                {
+                    "type": "SpriteComponent",
+                    "properties": {
+                        "updateOrder": 100,
+                        "fileName": "assets/bungo.png",
+                        "drawOrder": 100
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Entity",
+            "properties": {
+                "state": "active",
+                "position": [
+                    200.0,
+                    30.0
+                ],
+                "rotation": 0.0,
+                "scale": 10.0
+            },
+            "components": [
+                {
+                    "type": "SpriteComponent",
+                    "properties": {
+                        "updateOrder": 100,
+                        "fileName": "assets/skeleton-sprite.png",
+                        "drawOrder": 100
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Entity",
+            "properties": {
+                "state": "active",
+                "position": [
+                    18.0,
+                    96.0
+                ],
+                "rotation": 0.0,
+                "scale": 1.0
+            },
+            "components": [
+                {
+                    "type": "CameraComponent",
+                    "properties": {
+                        "updateOrder": 100,
+                        "zoom": 1.0
+                    }
+                },
+                {
+                    "type": "SpriteComponent",
+                    "properties": {
+                        "updateOrder": 100,
+                        "fileName": "assets/bungo.png",
+                        "drawOrder": 100
+                    }
+                }
+            ]
+        }
+    ]
+}
