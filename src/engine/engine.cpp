@@ -4,7 +4,7 @@
 #include "../entity/entity.h"
 #include "../uiSystem/uiScreen.h"
 #include "../uiSystem/pauseMenu.h"
-#include "../font/font.h"
+#include "../renderer/font.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_keycode.h>

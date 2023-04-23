@@ -4,7 +4,7 @@
 #include "../renderer/renderer.h"
 #include "../renderer/texture.h"
 #include "../inputSystem/inputSystem.h"
-#include "../font/font.h"
+#include "../renderer/font.h"
 #include "../renderer/shader.h"
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_stdinc.h>

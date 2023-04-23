@@ -1,6 +1,6 @@
 #include "font.h"
+#include "texture.h"
 #include "../utils/psxcolor.h"
-#include "../renderer/texture.h"
 #include "../engine/engine.h"
 #include <SDL2/SDL_ttf.h>
 

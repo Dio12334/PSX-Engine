@@ -2,13 +2,13 @@ BINARY=a.out # name of the binary
 CODEDIRS=. src/renderer src/engine src/inputSystem \
 		 src/entity src/components libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
 		src/components/camera src/components/ia src/components/sprites \
-		src/components/collision src/uiSystem src/font src/collision \
+		src/components/collision src/uiSystem src/collisionSystem \
 		src/utils src/math src/fileSystem/
 		 # where are the .c/.cpp?
 INCDIRS= scr/utils/ src/math src/renderer src/engine src/inputSystem\
 		 src/entity src/components libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
 		 src/components/camera src/components/ia src/components/sprites \
-		 src/components/collision src/uiSystem src/font src/collision \
+		 src/components/collision src/uiSystem src/collisionSystem \
 		 src/fileSystem/
 		 # where are the .h/.hpp?
 

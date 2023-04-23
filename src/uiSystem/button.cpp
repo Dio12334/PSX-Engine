@@ -1,7 +1,7 @@
 #include "button.h"
 #include "../renderer/texture.h"
 #include "../math/psxvector.h"
-#include "../font/font.h"
+#include "../renderer/font.h"
 
 namespace psx {
 	Button::Button(const std::string& name, Font* font, std::function<void()> onClick, const Vec2f& pos, const Vec2f& dims): 
