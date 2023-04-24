@@ -22,9 +22,6 @@ namespace psx {
 			void AddEntity(class Entity* entity);
 			void RemoveEntity(class Entity* entity);
 
-			const std::vector<class UIScreen*>& GetUIStack() { return m_UIStack; }
-			void PushUI(class UIScreen* screen);
-
 			class Font* GetFont(const std::string& fileName);
 
 			enum State{
@@ -60,7 +57,6 @@ namespace psx {
 			std::vector<class Entity*> m_entities;
 			std::vector<class Entity*> m_pausedEntities;
 
-			std::vector<class UIScreen*> m_UIStack;
 			std::unordered_map<std::string, class Font*> m_fonts;
 			std::unordered_map<std::string, std::string> m_text;
 	};

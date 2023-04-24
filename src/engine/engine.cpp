@@ -2,8 +2,6 @@
 #include "../renderer/renderer.h"
 #include "../inputSystem/inputSystem.h"
 #include "../entity/entity.h"
-#include "../uiSystem/uiScreen.h"
-#include "../uiSystem/pauseMenu.h"
 #include "../renderer/font.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -93,9 +91,6 @@ namespace psx {
 						if(m_engineState == State::sGameplay){
 							HandleKeyPress(event.key.keysym.sym);
 						}
-						else if(!m_UIStack.empty()){
-							m_UIStack.back()->HandleKeyPress(event.key.keysym.sym);
-						}
 					}
 					break;
 				case SDL_MOUSEWHEEL:
@@ -106,9 +101,6 @@ namespace psx {
 					if(!event.key.repeat){
 						if(m_engineState == State::sGameplay){
 							HandleKeyPress(event.button.button);
-						}
-						else if(!m_UIStack.empty()){
-							m_UIStack.back()->HandleKeyPress(event.button.button);
 						}
 					}
 					break;
@@ -125,9 +117,6 @@ namespace psx {
 				entity->ProcessInput(state);
 			}
 			m_updatingEntities = false;
-		}
-		else if(!m_UIStack.empty()){
-			m_UIStack.back()->ProcessInput(state);
 		}
 	}
 	
@@ -167,21 +156,6 @@ namespace psx {
 			}
 		}
 
-		for(auto ui: m_UIStack){
-			if(ui->GetState() == UIScreen::sActive){
-				ui->Update(deltaTime);
-			}
-		}
-		auto iter = m_UIStack.begin();
-		while(iter != m_UIStack.end()){
-			if((*iter)->GetState() == UIScreen::sClosing){
-				delete *iter;
-				iter = m_UIStack.erase(iter);
-			}
-			else{
-				++iter;
-			}
-		}
 	}
 
 	void Engine::GenerateOutput(){
@@ -242,18 +216,11 @@ namespace psx {
 		while(!m_entities.empty()){
 			delete m_entities.back();
 		}
-		while(!m_UIStack.empty()){
-			delete m_UIStack.back();
-			m_UIStack.pop_back();
-		}
 		if(m_renderer){
 			m_renderer->UnloadData();
 		}
 	}
 	
-	void Engine::PushUI(class UIScreen *screen){
-		m_UIStack.emplace_back(screen);
-	}
 
 	class Font* Engine::GetFont(const std::string &fileName){
 		auto iter = m_fonts.find(fileName);
@@ -277,8 +244,7 @@ namespace psx {
 	void Engine::HandleKeyPress(i32 key){
 		switch(key){
 			case SDLK_ESCAPE:
-				SDL_Log("escape\n");
-				new PauseMenu(this);
+				m_engineState = State::sQuit;
 				break;
 			case SDLK_l:
 				LevelLoader::SaveLevel(this, "assets/level.glevel");	

@@ -4,7 +4,6 @@
 #include "shader.h"
 #include "../components/sprites/spriteComponent.h"
 #include "../engine/engine.h"
-#include "../uiSystem/uiScreen.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_video.h>
 #include <algorithm>
@@ -109,9 +108,6 @@ namespace psx {
 			sprite->Draw(m_spriteShader);
 		}
 
-		for(auto ui: m_engine->GetUIStack()){
-			ui->Draw(m_spriteShader);
-		}
 		glDisable(GL_TEXTURE_2D);
 
 		SDL_GL_SwapWindow(m_window);
@@ -189,10 +185,6 @@ namespace psx {
 
 
 	glm::mat4 CreateTopDownViewMatrix(Vec2f cameraPosition, float zoom, float width, float height){
-		/* auto camPos = glm::vec3(cameraPosition.x, cameraPosition.y, zoom); */
-		/* auto target = glm::vec3(cameraPosition.x, cameraPosition.y, 0); */
-		/* auto view = glm::lookAt(camPos, target, glm::vec3(0.f, 1.f, 0.f)); */
-		/* view = glm::perspective(static_cast<float>(M_PI/2), width/height, zoom, 0.f) * view; */
 		auto halfWidth = width * 0.5f / zoom;
 		auto halfHeight = height * 0.5f / zoom;
 		auto left = cameraPosition.x - halfWidth;

@@ -3,10 +3,10 @@ My own attempt of an engine having for a base the code taught in the book "Game 
 
 # TO-DO LIST
 
-- Reordenar los archivos en una mejor jerarquía de folderes/archivos
+- ~~Reordenar los archivos en una mejor jerarquía de folderes/archivos~~
 - Limpiar el código y comentar lo necesario
 - Crear y usar alocadores más especializados para su uso en el engine
-- Arreglar el sistema de UI para que 
+- ~~Arreglar el sistema de UI~~ Ahora usaremos DearImgui para manejar interfaces in game y en el editor
 - Automatizar la serialización de componentes/actores
 - Serialización en binario
 - Usar bounding volume Hierarchy para la detección de colisiones
