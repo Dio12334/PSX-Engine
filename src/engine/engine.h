@@ -18,6 +18,7 @@ namespace psx {
 
 			class Renderer* GetRenderer() const { return m_renderer; }
 			class InputSystem* GetInputSystem() const { return m_inputSystem; }
+			class UISystem* GetUISystem() const { return m_uiSystem; }
 
 			void AddEntity(class Entity* entity);
 			void RemoveEntity(class Entity* entity);
@@ -53,6 +54,7 @@ namespace psx {
 
 			class Renderer* m_renderer;
 			class InputSystem* m_inputSystem;
+			class UISystem* m_uiSystem;
 
 			std::vector<class Entity*> m_entities;
 			std::vector<class Entity*> m_pausedEntities;

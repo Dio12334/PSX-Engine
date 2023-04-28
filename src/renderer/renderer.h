@@ -35,6 +35,9 @@ namespace psx {
 
 			void SetZoom(float zoom) { m_zoom = zoom; }
 			float GetZoom() const { return m_zoom; }
+
+			SDL_Window* GetWindow() const { return m_window; }
+			SDL_GLContext GetContext() const { return m_context; }
 		private:
 			bool LoadShaders();
 			void CreateSpriteVerts();

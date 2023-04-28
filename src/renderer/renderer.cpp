@@ -4,6 +4,7 @@
 #include "shader.h"
 #include "../components/sprites/spriteComponent.h"
 #include "../engine/engine.h"
+#include "../uiSystem/uiSystem.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_video.h>
 #include <algorithm>
@@ -92,6 +93,7 @@ namespace psx {
 	}
 			
 	void Renderer::Draw(){
+		m_engine->GetUISystem()->BeginRender();
 		glClearColor(0.86f, 0.86f, 0.86f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
@@ -109,7 +111,7 @@ namespace psx {
 		}
 
 		glDisable(GL_TEXTURE_2D);
-
+		m_engine->GetUISystem()->EndRender();
 		SDL_GL_SwapWindow(m_window);
 	}
 

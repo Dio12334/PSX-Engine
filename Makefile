@@ -3,13 +3,13 @@ CODEDIRS=. src/renderer src/engine src/inputSystem \
 		 src/entity src/components libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
 		src/components/camera src/components/ia src/components/sprites \
 		src/components/collision src/uiSystem src/collisionSystem \
-		src/utils src/math src/fileSystem/
+		src/utils src/math src/fileSystem/ libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .c/.cpp?
 INCDIRS= scr/utils/ src/math src/renderer src/engine src/inputSystem\
 		 src/entity src/components libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
 		 src/components/camera src/components/ia src/components/sprites \
 		 src/components/collision src/uiSystem src/collisionSystem \
-		 src/fileSystem/
+		 src/fileSystem/ libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .h/.hpp?
 
 LINKERFLAGS = -lSDL2 -lSDL2_image -lGL -lGLEW -lSOIL -lSDL2_ttf

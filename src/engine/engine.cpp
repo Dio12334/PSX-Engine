@@ -1,6 +1,7 @@
 #include "engine.h"
 #include "../renderer/renderer.h"
 #include "../inputSystem/inputSystem.h"
+#include "../uiSystem/uiSystem.h"
 #include "../entity/entity.h"
 #include "../renderer/font.h"
 #include <SDL2/SDL.h>
@@ -22,7 +23,9 @@ namespace psx {
 		m_updatingEntities(false),
 		m_ticksCount(0), 
 		m_renderer(nullptr), 
-		m_inputSystem(nullptr){
+		m_inputSystem(nullptr),
+		m_uiSystem(nullptr)
+	{
 
 	}
 	
@@ -47,6 +50,9 @@ namespace psx {
 			m_inputSystem = nullptr;
 			return false;
 		}
+
+		m_uiSystem = new UISystem();
+		m_uiSystem->Initialize(m_renderer->GetWindow(), m_renderer->GetContext());
 
 		if(TTF_Init() != 0){
 			SDL_Log("Failed to initialize SDL_ttf\n");
@@ -75,6 +81,9 @@ namespace psx {
 		if(m_inputSystem){
 			m_inputSystem->Shutdown();
 		}
+		if(m_uiSystem){
+			m_uiSystem->Shutdown();
+		}
 		SDL_Quit();
 	}
 			
@@ -82,6 +91,7 @@ namespace psx {
 		m_inputSystem->PrepareForUpdate();
 		SDL_Event event;
 		while(SDL_PollEvent(&event)){
+			m_uiSystem->ProcessEvent(&event);
 			switch (event.type) {
 				case SDL_QUIT:
 					m_engineState = State::sQuit;
@@ -122,7 +132,9 @@ namespace psx {
 	
 
 	void Engine::UpdateGame(){
-
+		
+		m_uiSystem->StartFrame();
+		ImGui::ShowDemoWindow();
 		while(!SDL_TICKS_PASSED(SDL_GetTicks(), m_ticksCount + 16));
 		float deltaTime = (SDL_GetTicks() - m_ticksCount)/1000.f;
 		if(deltaTime > 0.05f){
@@ -210,6 +222,7 @@ namespace psx {
 		/* s = new SpriteComponent(e); */
 		/* s->SetTexture(tex2); */
 		LevelLoader::LoadLevel(this, "assets/level.glevel");
+		//ImGui::ShowDemoWindow();
 	}
 
 	void Engine::UnloadData(){
