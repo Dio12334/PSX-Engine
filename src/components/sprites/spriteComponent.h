@@ -9,6 +9,8 @@ namespace psx {
 	class SpriteComponent: public Component{
 		public:
 			DEFINE_COMPONENT_TYPE(SpriteComponent);
+
+
 			SpriteComponent(class Entity* owner, i32 drawOrder = 100);
 			~SpriteComponent();
 			virtual void Draw(class Shader* shader);

@@ -13,6 +13,7 @@
 namespace psx {
 
 	INITIALIZE_COMPONENT_TYPE(SpriteComponent);
+
 	SpriteComponent::SpriteComponent(class Entity* owner, int drawOrder): 
 		Component(owner),
 		m_texture(nullptr),

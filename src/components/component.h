@@ -4,23 +4,30 @@
 #include "../utils/psxint.h"
 #include "../inputSystem/inputSystem.h"
 #include "../fileSystem/levelLoader.h"
+#include <cstddef>
 #include <rapidjson/document.h>
 #include <vector>
 
 namespace psx {
+	
+	using ComponentID = std::size_t;
+
+	inline ComponentID GetComponentTypeID(){
+		static ComponentID lastID = 0;
+		return lastID++;
+	}
+
+	template <typename T>
+	inline ComponentID GetComponentTypeID() noexcept{
+		static ComponentID typeID = GetComponentTypeID();
+		return typeID;
+	};
+
+	constexpr std::size_t g_maxComponents = 32;
 
 	class Component{
 		public:
 
-			/* enum TypeID{ */
-			/* 	tComponent = 0, */
-			/* 	tCameraComponent, */
-			/* 	tMoveComponent, */
-			/* 	tSpriteComponent, */
-			/* 	NUM_COMPONENT_TYPES */
-			/* }; */
-
-			/* static const char* typeNames[NUM_COMPONENT_TYPES]; */
 			typedef std::string TypeID;
 			virtual TypeID GetType() const = 0;			
 
@@ -41,6 +48,8 @@ namespace psx {
 				t->LoadProperties(inObj);
 				return t;
 			}
+
+			
 			
 		protected:
 			class Entity* m_entity;
@@ -54,8 +63,7 @@ namespace psx {
 	static Component::TypeID GetComponentType() { return s_type; }
 
 #define INITIALIZE_COMPONENT_TYPE(ComponentType)\
-	const Component::TypeID ComponentType::s_type = #ComponentType;\
-	bool t##ComponentType = LevelLoader::AddComponentFunc({ComponentType::GetComponentType(), &Component::Create<ComponentType>});
+	const Component::TypeID ComponentType::s_type = LevelLoader::AddComponentFunc({#ComponentType, &Component::Create<ComponentType>});
 
 #endif
 

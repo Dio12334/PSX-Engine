@@ -54,23 +54,7 @@ namespace psx {
 	} 
 
 
-	void Entity::AddComponent(class Component* component){
-		int order = component->GetUpdateOrder();
-		auto iter = m_components.begin();
-		for(; iter != m_components.end(); ++iter){
-			if(order < (*iter)->GetUpdateOrder()){
-				break;
-			}
-		}
-		m_components.insert(iter, component);
-	}
 
-	void Entity::RemoveComponent(class Component* component){
-		auto iter = std::find(m_components.begin(), m_components.end(), component);
-		if(iter != m_components.end()){
-			m_components.erase(iter);
-		}
-	}
 
 
 	void Entity::ProcessInput(const struct InputState &state){

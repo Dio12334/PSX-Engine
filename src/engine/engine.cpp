@@ -30,6 +30,7 @@ namespace psx {
 	}
 	
 	bool Engine::Init(){
+
 		if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0){
 			SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 			return false;
@@ -134,7 +135,13 @@ namespace psx {
 	void Engine::UpdateGame(){
 		
 		m_uiSystem->StartFrame();
-		ImGui::ShowDemoWindow();
+		
+		//Demo window
+		ImGui::Begin("Demo window");
+		ImGui::Button("Hello!");
+		ImGui::End();
+
+
 		while(!SDL_TICKS_PASSED(SDL_GetTicks(), m_ticksCount + 16));
 		float deltaTime = (SDL_GetTicks() - m_ticksCount)/1000.f;
 		if(deltaTime > 0.05f){
@@ -222,7 +229,6 @@ namespace psx {
 		/* s = new SpriteComponent(e); */
 		/* s->SetTexture(tex2); */
 		LevelLoader::LoadLevel(this, "assets/level.glevel");
-		//ImGui::ShowDemoWindow();
 	}
 
 	void Engine::UnloadData(){

@@ -18,16 +18,14 @@ namespace psx {
 			static bool LoadJSON(const std::string& fileName, rapidjson::Document& outDoc);
 			static void SaveLevel(class Engine* engine, const std::string& fileName);
 			
-			static bool AddEntityFunc(const std::pair<std::string, EntityFunc>& en){
+			static std::string AddEntityFunc(const std::pair<std::string, EntityFunc>& en){
 				entityFactory().insert(en);
-				return true;
+				return en.first;
 			}
 
-			static bool AddComponentFunc(const std::pair<std::string, ComponentFunc>& co){
-				std::cout << "adding " << co.first << std::endl;
+			static std::string AddComponentFunc(const std::pair<std::string, ComponentFunc>& co){
 				componentFactory().insert(co);
-				std::cout << "added" << std::endl;
-				return true;
+				return co.first;
 			}
 
 			static std::unordered_map<std::string, EntityFunc>& entityFactory();

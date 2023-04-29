@@ -29,35 +29,28 @@ namespace psx {
 
 
 	bool LevelLoader::LoadLevel(class Engine* engine, const std::string& fileName){
-		SDL_Log("Begin loading\n");
-		std::cout << "Begin loading\n" << std::endl;
 		rapidjson::Document doc;
 
-		SDL_Log("Load JSON\n");
 		if(!LoadJSON(fileName, doc)){
 			SDL_Log("Failed to load level %s", fileName.c_str());
 			return false;
 		}
 		
-		SDL_Log("Load version\n");
 		int version = 0;
 		if(!json::GetInt(doc, "version", version) || version != LevelVersion){
 			SDL_Log("Incorrect level file version for %s", fileName.c_str());
 			return false;
 		}
 		
-		SDL_Log("Load global properties\n");
 		const rapidjson::Value& globals = doc["globalProperties"];
 		if(globals.IsObject()){
 			LoadGlobalProperties(engine, globals);
 		}
 			
-		SDL_Log("Load entities\n");
 		const rapidjson::Value& entities = doc["entities"];
 		if(entities.IsArray()){
 			LoadEntities(engine, entities);
 		}
-		SDL_Log("Level loaded!\n");
 		return true;
 	}
 
