@@ -2,7 +2,6 @@
 #include "../renderer/renderer.h"
 #include "../inputSystem/inputSystem.h"
 #include "../uiSystem/uiSystem.h"
-#include "../entity/entity.h"
 #include "../renderer/font.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -12,9 +11,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 #include <rapidjson/document.h>
-#include "../components/components.h"
-#include "../fileSystem/levelLoader.h"
+#include "../scene/scene.h"
+#include "../scene/testScene.h"
+
 namespace psx {
 
 
@@ -24,7 +25,8 @@ namespace psx {
 		m_ticksCount(0), 
 		m_renderer(nullptr), 
 		m_inputSystem(nullptr),
-		m_uiSystem(nullptr)
+		m_uiSystem(nullptr),
+		m_activeScene(nullptr)
 	{
 
 	}
@@ -88,9 +90,24 @@ namespace psx {
 		SDL_Quit();
 	}
 			
+	void Engine::SetCurrentState(){
+		static State prevState = State::sGameplay;
+
+		if(ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && m_engineState != State::sUI){
+			prevState = m_engineState;
+			m_engineState = State::sUI;
+		}
+		else if(!ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow) && m_engineState == State::sUI){
+			m_engineState = prevState;
+		}
+	}
+
 	void Engine::ProcessInput(){
 		m_inputSystem->PrepareForUpdate();
 		SDL_Event event;
+
+		SetCurrentState();
+
 		while(SDL_PollEvent(&event)){
 			m_uiSystem->ProcessEvent(&event);
 			switch (event.type) {
@@ -120,15 +137,7 @@ namespace psx {
 			}
 		}
 		m_inputSystem->Update();
-		const auto& state = m_inputSystem->GetState();
 
-		if(m_engineState == State::sGameplay){
-			m_updatingEntities = true;
-			for(auto entity: m_entities){
-				entity->ProcessInput(state);
-			}
-			m_updatingEntities = false;
-		}
 	}
 	
 
@@ -137,10 +146,17 @@ namespace psx {
 		m_uiSystem->StartFrame();
 		
 		//Demo window
-		ImGui::Begin("Demo window");
-		ImGui::Button("Hello!");
-		ImGui::End();
+		ImGui::ShowDemoWindow();
+		ImGui::Begin("My Fixed-Size Window", NULL, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
+		
+		ImGui::Text("Hello, world!");
 
+		if (ImGui::Button("Click me!")) {
+
+			std::cout << "Button clicked!\n";
+		}
+
+		ImGui::End();
 
 		while(!SDL_TICKS_PASSED(SDL_GetTicks(), m_ticksCount + 16));
 		float deltaTime = (SDL_GetTicks() - m_ticksCount)/1000.f;
@@ -150,60 +166,13 @@ namespace psx {
 		m_ticksCount = SDL_GetTicks();
 		
 		if(m_engineState == State::sGameplay){
-			m_updatingEntities = true;
-			for(auto entity: m_entities){
-				entity->Update(deltaTime);
-			}
-			m_updatingEntities = false;
-
-			for(auto entity: m_pausedEntities){
-				entity->ComputeWorldTransform();
-				m_entities.push_back(entity);
-			}
-
-			m_pausedEntities.clear();
-
-			std::vector<Entity*> dead;
-			for(auto entity: m_entities){
-				if(entity->GetState() == Entity::State::sDead){
-					dead.push_back(entity);
-				}
-			}
-
-			for(auto entity: dead){
-				delete entity;
-			}
+			m_activeScene->OnUpdate(deltaTime);
 		}
 
 	}
 
 	void Engine::GenerateOutput(){
-		m_renderer->Draw();
-	}
-
-	void Engine::AddEntity(class Entity *entity){
-		if(m_updatingEntities){
-			m_pausedEntities.push_back(entity);
-		}
-		else{
-			m_entities.push_back(entity);
-		}
-	}
-
-	void Engine::RemoveEntity(class Entity *entity){
-		auto iter = std::find(m_pausedEntities.begin(), m_pausedEntities.end(), entity);
-		if(iter != m_pausedEntities.end()){	
-			// pendingActors.erase(iter); inefficient if actor in the middle
-			std::iter_swap(iter, m_pausedEntities.end() -1);
-			m_pausedEntities.pop_back();
-			return ; // i don't think there would be a copy of the same actor in the other vector
-		}
-
-		iter = std::find(m_entities.begin(), m_entities.end(), entity);
-		if(iter != m_entities.end()){
-			std::iter_swap(iter, m_entities.end() - 1);
-			m_entities.pop_back();
-		}
+		m_renderer->Draw(m_activeScene);
 	}
 
 	void Engine::LoadData(){
@@ -228,13 +197,13 @@ namespace psx {
 		/* auto c = new CameraComponent(e); */
 		/* s = new SpriteComponent(e); */
 		/* s->SetTexture(tex2); */
-		LevelLoader::LoadLevel(this, "assets/level.glevel");
+		/* LevelLoader::LoadLevel(this, "assets/level.glevel"); */
+		m_activeScene = new TestScene(this);
+		m_activeScene->LoadScene();
 	}
 
 	void Engine::UnloadData(){
-		while(!m_entities.empty()){
-			delete m_entities.back();
-		}
+		// unload entities shit
 		if(m_renderer){
 			m_renderer->UnloadData();
 		}
@@ -266,7 +235,7 @@ namespace psx {
 				m_engineState = State::sQuit;
 				break;
 			case SDLK_l:
-				LevelLoader::SaveLevel(this, "assets/level.glevel");	
+				/* LevelLoader::SaveLevel(this, "assets/level.glevel"); */	
 			default:
 				break;
 		}

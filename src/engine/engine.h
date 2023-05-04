@@ -2,7 +2,6 @@
 #define ENGINE_H
 
 #include "../utils/psxint.h"
-#include <vector>
 #include <string>
 #include <unordered_map>
 
@@ -28,7 +27,8 @@ namespace psx {
 			enum State{
 				sGameplay,
 				sPause,
-				sQuit
+				sQuit,
+				sUI
 			};
 
 			State GetState() const { return m_engineState; }
@@ -36,10 +36,10 @@ namespace psx {
 			void LoadText(const std::string& fileName);
 			const std::string& GetText(const std::string& key);
 
-			const std::vector<class Entity*>& GetEntities() const { return m_entities; }
 
 		private:
 	
+			void SetCurrentState();
 			void HandleKeyPress(i32 key);
 			void ProcessInput();
 			void UpdateGame();
@@ -55,9 +55,8 @@ namespace psx {
 			class Renderer* m_renderer;
 			class InputSystem* m_inputSystem;
 			class UISystem* m_uiSystem;
-
-			std::vector<class Entity*> m_entities;
-			std::vector<class Entity*> m_pausedEntities;
+			
+			class Scene* m_activeScene;
 
 			std::unordered_map<std::string, class Font*> m_fonts;
 			std::unordered_map<std::string, std::string> m_text;

@@ -1,15 +1,14 @@
 BINARY=a.out # name of the binary
 CODEDIRS=. src/renderer src/engine src/inputSystem \
-		 src/entity src/components libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
-		src/components/camera src/components/ia src/components/sprites \
-		src/components/collision src/uiSystem src/collisionSystem \
-		src/utils src/math src/fileSystem/ libs/imgui-1.89.5 libs/imgui-1.89.5/backends
+		libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
+		src/uiSystem src/collisionSystem src/scene\
+		src/utils src/math libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .c/.cpp?
 INCDIRS= scr/utils/ src/math src/renderer src/engine src/inputSystem\
-		 src/entity src/components libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
-		 src/components/camera src/components/ia src/components/sprites \
-		 src/components/collision src/uiSystem src/collisionSystem \
-		 src/fileSystem/ libs/imgui-1.89.5 libs/imgui-1.89.5/backends
+		 src/scene libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
+		 libs/entt-3.11.1/single_include/entt/ \
+		 src/uiSystem src/collisionSystem \
+		 libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .h/.hpp?
 
 LINKERFLAGS = -lSDL2 -lSDL2_image -lGL -lGLEW -lSOIL -lSDL2_ttf

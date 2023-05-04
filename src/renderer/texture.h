@@ -18,6 +18,7 @@ namespace psx {
 			i32 GetWidth() const { return m_width; }
 			i32 GetHeight() const { return m_height;}
 			void CreateFromSurface(SDL_Surface* surface);
+			i32 GetTextureID() const { return m_textureID; }
 		private:
 			u32 m_textureID;
 			i32 m_width;

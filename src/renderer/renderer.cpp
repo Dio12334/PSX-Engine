@@ -2,13 +2,17 @@
 #include "texture.h"
 #include "vertexArray.h"
 #include "shader.h"
-#include "../components/sprites/spriteComponent.h"
 #include "../engine/engine.h"
 #include "../uiSystem/uiSystem.h"
+#include "../scene/scene.h"
+#include "../scene/components.h"
 #include <GL/glew.h>
+#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_video.h>
 #include <algorithm>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <iostream>
 
 namespace psx {
 
@@ -86,8 +90,21 @@ namespace psx {
 		}
 		m_textures.clear();
 	}
+
+	void DrawSprite(const TransformComponent& tc, const SpriteComponent& sc, class Shader* shader){
+		if(sc.texture){
+
+			auto scaleMat = glm::scale(glm::mat4(1.f),glm::vec3(static_cast<float>(sc.TexWidth), static_cast<float>(sc.TexHeight), 1.0f));
+			auto world = tc.GetTransform() * scaleMat;
+			shader->SetMatrixUniform("uWorldTransform", world);
+			sc.texture->SetActive();
+			i32 at;
+			glGetIntegerv(GL_ACTIVE_TEXTURE, &at);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+		}
+	}
 			
-	void Renderer::Draw(){
+	void Renderer::Draw(class Scene* scene){
 		m_engine->GetUISystem()->BeginRender();
 		glClearColor(0.86f, 0.86f, 0.86f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -101,34 +118,19 @@ namespace psx {
 
 		m_spriteShader->SetMatrixUniform("uViewProj", m_view);
 
-		for(auto sprite: m_sprites){
-			sprite->Draw(m_spriteShader);
+		auto group = scene->m_registry.group<TransformComponent>(entt::get<SpriteComponent>);
+		group.sort<SpriteComponent>([](const auto& lhs, const auto& rhs){
+				return lhs.DrawOrder < rhs.DrawOrder;
+				});
+		for(auto entity : group){
+			auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
+			DrawSprite(transform, sprite, m_spriteShader);
 		}
-
 		glDisable(GL_TEXTURE_2D);
 		m_engine->GetUISystem()->EndRender();
 		SDL_GL_SwapWindow(m_window);
 	}
 
-
-	void Renderer::AddSprite(class SpriteComponent *sprite){
-		int drawOrder = sprite->GetDrawOrder();
-		auto iter = m_sprites.begin();
-		for(; iter != m_sprites.end(); ++iter){
-			if(drawOrder < (*iter)->GetDrawOrder()){
-				break;
-			}
-		}
-
-		m_sprites.insert(iter, sprite);
-	}
-
-	void Renderer::RemoveSprite(class SpriteComponent *sprite){
-		auto iter = std::find(m_sprites.begin(), m_sprites.end(), sprite);
-		if(iter != m_sprites.end()){
-			m_sprites.erase(iter);
-		}
-	}
 
 	
 	class Texture* Renderer::LoadTexture(const std::string& fileName){
@@ -146,6 +148,7 @@ namespace psx {
 				m_textures.emplace(fileName, text);
 			}
 			else{
+				SDL_Log("Failed to load texture %s\n", fileName.c_str());
 				delete text;
 				return nullptr;
 			}
@@ -175,7 +178,7 @@ namespace psx {
 			return false;
 		}
 		m_spriteShader->SetActive();
-		m_view = CreateTopDownViewMatrix(Vec2f(0.f, 0.f), 400.f, m_screenWidth, m_screenHeight);
+		m_view = CreateTopDownViewMatrix(Vec2f(0.f, 0.f), 1.f, m_screenWidth, m_screenHeight);
 		m_spriteShader->SetMatrixUniform("uViewProj", m_view);
 		return true;
 	}

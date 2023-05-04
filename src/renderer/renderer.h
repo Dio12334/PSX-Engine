@@ -3,7 +3,6 @@
 
 #include "../math/psxvector.h"
 #include <SDL2/SDL.h>
-#include <vector>
 #include <unordered_map>
 #include <string>
 #include <glm/glm.hpp>
@@ -16,12 +15,10 @@ namespace psx {
 			bool Initialize(unsigned int screenWidth, unsigned int screenHeight);
 			void Shutdown();
 			void UnloadData();
-			void Draw();
+			void Draw(class Scene* scene);
 
 			class Texture* LoadTexture(const std::string& fileName);
 
-			void AddSprite(class SpriteComponent* sprite);
-			void RemoveSprite(class SpriteComponent* sprite);
 			
 			void SetViewMatrix(const glm::mat4& matrix) { m_view = matrix; }
 			glm::mat4 GetViewMatrix() const { return m_view; }
@@ -55,7 +52,6 @@ namespace psx {
 			
 			Vec2f m_position;
 			float m_zoom;
-			std::vector<class SpriteComponent*> m_sprites;
 			std::unordered_map<std::string, class Texture*> m_textures;
 			
 		

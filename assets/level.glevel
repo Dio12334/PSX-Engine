@@ -51,8 +51,8 @@
             "properties": {
                 "state": "active",
                 "position": [
-                    263.0,
-                    495.0
+                    123.0,
+                    173.0
                 ],
                 "rotation": 0.0,
                 "scale": 1.0
@@ -62,7 +62,7 @@
                     "type": "CameraComponent",
                     "properties": {
                         "updateOrder": 100,
-                        "zoom": 1.0
+                        "zoom": 17.0
                     }
                 },
                 {
