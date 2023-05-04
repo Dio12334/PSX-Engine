@@ -1,13 +1,13 @@
 BINARY=a.out # name of the binary
 CODEDIRS=. src/renderer src/engine src/inputSystem \
 		libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
-		src/uiSystem src/collisionSystem src/scene\
+		src/uiSystem src/scene\
 		src/utils src/math libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .c/.cpp?
 INCDIRS= scr/utils/ src/math src/renderer src/engine src/inputSystem\
 		 src/scene libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
 		 libs/entt-3.11.1/single_include/entt/ \
-		 src/uiSystem src/collisionSystem \
+		 src/uiSystem \
 		 libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .h/.hpp?
 
@@ -17,7 +17,7 @@ OPT=-O2
 # generate files that encode make rules for the .h dependencies
 DEPFLAGS=-MP -MD
 # automatically add the -I onto each include directory
-CFLAGS= -fopenmp -std=c++17 -Wall -Wextra -g $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS) 
+CFLAGS=  -std=c++17 -Wall -Wextra $(foreach D,$(INCDIRS),-I$(D)) $(OPT) $(DEPFLAGS) 
 
 # for-style iteration (foreach) and regular expression completions (wildcard)
 CFILES=$(foreach D,$(CODEDIRS),$(wildcard $(D)/*.cpp))
