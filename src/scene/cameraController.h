@@ -4,8 +4,7 @@
 #include "scriptableEntity.h"
 #include "components.h"
 #include "scene.h"
-#include "../engine/engine.h"
-#include "../inputSystem/inputSystem.h"
+#include "../inputSystem/userInput.h"
 #include "../renderer/renderer.h"
 #include <iostream>
 
@@ -16,19 +15,19 @@ namespace psx {
 			void OnUpdate(float dt) override {
 				auto& t = GetComponent<TransformComponent>();
 				float speed = 700.f;
-				auto is = GetScene()->GetEngine()->GetInputSystem();
-				auto ks = is->GetState().keyboard;
-				if(ks.GetKeyValue(KeyCode::A)){
+
+				
+				if(UserInput::GetKeyValue(KeyCode::A)){
 					t.Translation.x -= speed * dt;
 				}
 
-				if(ks.GetKeyValue(KeyCode::S)){
+				if(UserInput::GetKeyValue(KeyCode::S)){
 					t.Translation.y -= speed * dt;
 				}
-				if(ks.GetKeyValue(KeyCode::D)){
+				if(UserInput::GetKeyValue(KeyCode::D)){
 					t.Translation.x += speed * dt;
 				}
-				if(ks.GetKeyValue(KeyCode::W) ){
+				if(UserInput::GetKeyValue(KeyCode::W) ){
 					t.Translation.y += speed * dt;
 				}
 				

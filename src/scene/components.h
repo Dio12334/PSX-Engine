@@ -3,6 +3,7 @@
 
 #include <glm/ext/matrix_transform.hpp>
 #include <string>
+#include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/quaternion.hpp>
@@ -66,16 +67,12 @@ namespace psx {
 
 	class ScriptableEntity;
 	struct NativeScriptComponent{
-		ScriptableEntity* Instance = nullptr;
+		std::vector<ScriptableEntity*> Instances;
 
-		ScriptableEntity*(*InstantiateFunc)();
-		void(*DestroyInstanceFunc)(NativeScriptComponent*);
 
 		template <typename T>
 		void Bind(){
-			InstantiateFunc = []() {return static_cast<ScriptableEntity*>(new T()); };
-			DestroyInstanceFunc = [](NativeScriptComponent* nsc) { delete (T*)nsc->Instance; nsc->Instance = nullptr;};
-			
+			Instances.push_back(static_cast<ScriptableEntity*>(new T()));
 		}
 	};
 }

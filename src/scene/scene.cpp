@@ -29,13 +29,17 @@ namespace psx {
 		// Update scripts
 		{
 			m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc){
-						if(!nsc.Instance){
-							nsc.Instance = nsc.InstantiateFunc();
-							nsc.Instance->m_entity = {entity, this};
-							nsc.Instance->OnCreate();
+
+						for(auto instance: nsc.Instances){
+
+							if(!instance->m_entity.GetScene()){
+								instance->m_entity = { entity, this };
+								instance->OnCreate();
+							}
+
+							instance->OnUpdate(dt);
 						}
 
-						nsc.Instance->OnUpdate(dt);
 				});
 		}
 

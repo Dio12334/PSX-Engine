@@ -7,6 +7,7 @@
 #include "../engine/engine.h"
 #include "../renderer/renderer.h"
 #include "cameraController.h"
+#include "testScript.h"
 
 namespace psx{
 	class TestScene: public Scene{
@@ -21,6 +22,7 @@ namespace psx{
 				bungo.AddComponent<SpriteComponent>(m_engine->GetRenderer()->LoadTexture("assets/bungo.png"));
 				bungo.AddComponent<CameraComponent>(m_engine->GetRenderer());
 				bungo.AddComponent<NativeScriptComponent>().Bind<CameraController>();
+				bungo.GetComponent<NativeScriptComponent>().Bind<TestScript>();
 
 
 				bungo = CreateEntity("bungow??");

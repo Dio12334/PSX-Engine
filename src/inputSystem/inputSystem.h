@@ -60,6 +60,7 @@ namespace psx {
 			InputState m_state;
 
 	};
+
 }
 
 #endif

@@ -2,6 +2,7 @@
 #include "../renderer/renderer.h"
 #include "../inputSystem/inputSystem.h"
 #include "../uiSystem/uiSystem.h"
+#include "../inputSystem/userInput.h"
 #include "../renderer/font.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -53,6 +54,7 @@ namespace psx {
 			m_inputSystem = nullptr;
 			return false;
 		}
+		UserInput::Init(m_inputSystem);
 
 		m_uiSystem = new UISystem();
 		m_uiSystem->Initialize(m_renderer->GetWindow(), m_renderer->GetContext());
@@ -84,6 +86,8 @@ namespace psx {
 		if(m_inputSystem){
 			m_inputSystem->Shutdown();
 		}
+		UserInput::Shutdown();
+
 		if(m_uiSystem){
 			m_uiSystem->Shutdown();
 		}
