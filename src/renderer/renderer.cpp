@@ -2,37 +2,28 @@
 #include "texture.h"
 #include "vertexArray.h"
 #include "shader.h"
-#include "../engine/engine.h"
-#include "../uiSystem/uiSystem.h"
+
 #include "../scene/scene.h"
-#include "../scene/components.h"
 #include <GL/glew.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_video.h>
 #include <algorithm>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/string_cast.hpp>
-#include <iostream>
 
 namespace psx {
+    SDL_Window* Renderer::m_window = nullptr;
+    class Shader* Renderer::m_spriteShader = nullptr;
+    class VertexArray* Renderer::m_spriteVerts = nullptr;
 
-	Renderer::Renderer(class Engine* engine) :
-		m_engine(engine), 
-		m_window(nullptr), 
-		m_spriteShader(nullptr),
-		m_spriteVerts(nullptr),
-		m_screenWidth(0), 
-		m_screenHeight(0){ 
+    int Renderer::m_screenWidth = 0;
+    int Renderer::m_screenHeight = 0;
 
-	}
+    SDL_GLContext Renderer::m_context;
 
-	Renderer::~Renderer(){
+    std::unordered_map<std::string, class Texture*> Renderer::m_textures;
 
-	}
-			
 	bool Renderer::Initialize(unsigned int screenWidth, unsigned int screenHeight){
-		m_screenHeight = screenHeight;
-		m_screenWidth = screenWidth;
+		m_screenHeight = (int) screenHeight;
+		m_screenWidth = (int) screenWidth;
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
@@ -91,46 +82,35 @@ namespace psx {
 		m_textures.clear();
 	}
 
-	void DrawSprite(const TransformComponent& tc, const SpriteComponent& sc, class Shader* shader){
-		if(sc.texture){
+    void Renderer::BeginScene(const Camera& camera, const glm::mat4& cameraTransform){
+        glClearColor(0.86f, 0.86f, 0.86f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
+        glEnable(GL_BLEND);
+        glEnable(GL_TEXTURE_2D);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+        m_spriteShader->SetActive();
+        m_spriteVerts->SetActive();
+
+        auto viewProj = camera.GetProjection() * glm::inverse(cameraTransform);
+        m_spriteShader->SetMatrixUniform("uViewProj", viewProj);
+
+    }
+    void Renderer::EndScene(){
+        glDisable(GL_TEXTURE_2D);
+        SDL_GL_SwapWindow(m_window);
+    }
+
+	void Renderer::DrawSprite(const TransformComponent& tc, const SpriteComponent& sc){
+		if(sc.texture){
 			auto scaleMat = glm::scale(glm::mat4(1.f),glm::vec3(static_cast<float>(sc.TexWidth), static_cast<float>(sc.TexHeight), 1.0f));
 			auto world = tc.GetTransform() * scaleMat;
-			shader->SetMatrixUniform("uWorldTransform", world);
+			m_spriteShader->SetMatrixUniform("uWorldTransform", world);
 			sc.texture->SetActive();
-			i32 at;
-			glGetIntegerv(GL_ACTIVE_TEXTURE, &at);
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 		}
 	}
-			
-	void Renderer::Draw(class Scene* scene){
-		m_engine->GetUISystem()->BeginRender();
-		glClearColor(0.86f, 0.86f, 0.86f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		
-		glEnable(GL_BLEND);
-		glEnable(GL_TEXTURE_2D);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		
-		m_spriteShader->SetActive();
-		m_spriteVerts->SetActive();
-
-		m_spriteShader->SetMatrixUniform("uViewProj", m_view);
-
-		auto group = scene->m_registry.group<TransformComponent>(entt::get<SpriteComponent>);
-		group.sort<SpriteComponent>([](const auto& lhs, const auto& rhs){
-				return lhs.DrawOrder < rhs.DrawOrder;
-				});
-		for(auto entity : group){
-			auto [transform, sprite] = group.get<TransformComponent, SpriteComponent>(entity);
-			DrawSprite(transform, sprite, m_spriteShader);
-		}
-		glDisable(GL_TEXTURE_2D);
-		m_engine->GetUISystem()->EndRender();
-		SDL_GL_SwapWindow(m_window);
-	}
-
 
 	
 	class Texture* Renderer::LoadTexture(const std::string& fileName){
@@ -178,24 +158,8 @@ namespace psx {
 			return false;
 		}
 		m_spriteShader->SetActive();
-		m_view = CreateTopDownViewMatrix(Vec2f(0.f, 0.f), 1.f, m_screenWidth, m_screenHeight);
-		m_spriteShader->SetMatrixUniform("uViewProj", m_view);
 		return true;
 	}
 
 
-	glm::mat4 CreateTopDownViewMatrix(Vec2f cameraPosition, float zoom, float width, float height){
-		auto halfWidth = width * 0.5f / zoom;
-		auto halfHeight = height * 0.5f / zoom;
-		auto left = cameraPosition.x - halfWidth;
-		auto right = cameraPosition.x + halfWidth;
-		auto bottom = cameraPosition.y - halfHeight;
-		auto top = cameraPosition.y + halfHeight;
-		auto view = glm::ortho(left, right, bottom, top, -1.f, 1.f);
-		return view;
-	}
-
-	glm::mat4 Renderer::CreateUIProjMatrix(){
-		return glm::ortho(0.0f, static_cast<float>(m_screenWidth), static_cast<float>(m_screenHeight), 0.0f, -1.0f, 1.0f);
-	}
 }

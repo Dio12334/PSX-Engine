@@ -2,10 +2,11 @@
 #include <GL/glew.h>
 namespace psx {
 
+    ImGuiIO* UISystem::s_io = nullptr;
 	void UISystem::Initialize(SDL_Window* window, SDL_GLContext context){
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
-		m_io = &ImGui::GetIO();
+		s_io = &ImGui::GetIO();
 
 		ImGui::StyleColorsDark();
 		ImGui_ImplSDL2_InitForOpenGL(window, context);
@@ -24,7 +25,7 @@ namespace psx {
 
 	void UISystem::BeginRender(){
 		ImGui::Render();
-		glViewport(0, 0, (int)(*m_io).DisplaySize.x, (int)(*m_io).DisplaySize.y);
+		glViewport(0, 0, (int)(*s_io).DisplaySize.x, (int)(*s_io).DisplaySize.y);
 	}
 	
 	void UISystem::EndRender(){

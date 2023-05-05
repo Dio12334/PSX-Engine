@@ -2,6 +2,7 @@
 #define RENDERER_H
 
 #include "../math/psxvector.h"
+#include "../scene/components.h"
 #include <SDL2/SDL.h>
 #include <unordered_map>
 #include <string>
@@ -10,54 +11,43 @@
 namespace psx {
 	class Renderer{
 		public:
-			Renderer(class Engine* engine);
-			~Renderer();
-			bool Initialize(unsigned int screenWidth, unsigned int screenHeight);
-			void Shutdown();
-			void UnloadData();
-			void Draw(class Scene* scene);
 
-			class Texture* LoadTexture(const std::string& fileName);
+			static bool Initialize(unsigned int screenWidth, unsigned int screenHeight);
+			static void Shutdown();
+			static void UnloadData();
 
-			
-			void SetViewMatrix(const glm::mat4& matrix) { m_view = matrix; }
-			glm::mat4 GetViewMatrix() const { return m_view; }
 
-			void SetPosition(const Vec2f& position) { m_position = position; }
-			Vec2f GetPosition() const { return m_position; }
+            static void DrawSprite(const TransformComponent& transform, const SpriteComponent& sprite);
+            static void BeginScene(const Camera& camera, const glm::mat4& cameraTransform);
 
-			Vec2f GetScreenDimensions() const { return Vec2f(m_screenWidth, m_screenHeight); }
+            static void EndScene();
 
-			glm::mat4 CreateUIProjMatrix();
+			static class Texture* LoadTexture(const std::string& fileName);
 
-			void SetZoom(float zoom) { m_zoom = zoom; }
-			float GetZoom() const { return m_zoom; }
+			static Vec2f GetScreenDimensions() { return Vec2f(m_screenWidth, m_screenHeight); }
 
-			SDL_Window* GetWindow() const { return m_window; }
-			SDL_GLContext GetContext() const { return m_context; }
+			static SDL_Window* GetWindow() { return m_window; }
+			static SDL_GLContext GetContext() { return m_context; }
+
 		private:
-			bool LoadShaders();
-			void CreateSpriteVerts();
-		
-			class Engine* m_engine;
-			SDL_Window* m_window;
-			class Shader* m_spriteShader;
-			class VertexArray* m_spriteVerts;
 
-			int m_screenWidth;
-			int m_screenHeight;
+			static bool LoadShaders();
+			static void CreateSpriteVerts();
+
+			static SDL_Window* m_window;
+			static class Shader* m_spriteShader;
+			static class VertexArray* m_spriteVerts;
+
+			static int m_screenWidth;
+			static int m_screenHeight;
 			
-			SDL_GLContext m_context;
-			glm::mat4 m_view;
+			static SDL_GLContext m_context;
 			
-			Vec2f m_position;
-			float m_zoom;
-			std::unordered_map<std::string, class Texture*> m_textures;
+			static std::unordered_map<std::string, class Texture*> m_textures;
 			
 		
 	};
 
-	glm::mat4 CreateTopDownViewMatrix(Vec2f cameraPosition, float zoom, float width, float height);
 }
 
 #endif

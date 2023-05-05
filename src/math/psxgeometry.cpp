@@ -2,7 +2,6 @@
 #include "psxvector.h"
 #include <array>
 #include <algorithm>
-#include <limits>
 
 namespace psx {
 	

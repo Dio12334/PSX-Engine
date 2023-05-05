@@ -5,19 +5,19 @@
 #include <SDL2/SDL.h>
 
 namespace psx {
+
 	class UISystem{
 		public:
-			void Initialize(SDL_Window* window, SDL_GLContext context);
-			void ProcessEvent(SDL_Event* event);
-			void StartFrame();
-			void BeginRender();
-			void EndRender();
-			void Shutdown();
-
+			static void Initialize(SDL_Window* window, SDL_GLContext context);
+			static void ProcessEvent(SDL_Event* event);
+			static void StartFrame();
+			static void BeginRender();
+			static void EndRender();
+			static void Shutdown();
 		private:
-			ImGuiIO* m_io;
-			
+			static ImGuiIO* s_io;
 	};
+
 }
 
 #endif

@@ -19,22 +19,22 @@ namespace psx{
 			void LoadScene() override {
 				auto bungo = CreateEntity("bungo");
 				bungo.GetComponent<TransformComponent>().Translation = glm::vec3(200, 40, 0);
-				bungo.AddComponent<SpriteComponent>(m_engine->GetRenderer()->LoadTexture("assets/bungo.png"));
-				bungo.AddComponent<CameraComponent>(m_engine->GetRenderer());
+				bungo.AddComponent<SpriteComponent>(Renderer::LoadTexture("assets/bungo.png"));
+				bungo.AddComponent<CameraComponent>();
 				bungo.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-				bungo.GetComponent<NativeScriptComponent>().Bind<TestScript>();
+				/* bungo.GetComponent<NativeScriptComponent>().Bind<TestScript>(); */
 
 
 				bungo = CreateEntity("bungow??");
 				bungo.GetComponent<TransformComponent>().Translation = glm::vec3(200, 30, 0);
 				bungo.GetComponent<TransformComponent>().Rotation = M_PI/2;
 				bungo.GetComponent<TransformComponent>().Scale = glm::vec3 {10.f};
-				bungo.AddComponent<SpriteComponent>(m_engine->GetRenderer()->LoadTexture("assets/bungo.png"));
+				bungo.AddComponent<SpriteComponent>(Renderer::LoadTexture("assets/bungo.png"));
 
 				bungo = CreateEntity("skeleton");
 				bungo.GetComponent<TransformComponent>().Translation = glm::vec3(200, 30, 0);
 				bungo.GetComponent<TransformComponent>().Scale = glm::vec3 {10.f};
-				bungo.AddComponent<SpriteComponent>(m_engine->GetRenderer()->LoadTexture("assets/skeleton-sprite.png"));
+				bungo.AddComponent<SpriteComponent>(Renderer::LoadTexture("assets/skeleton-sprite.png"));
 			}
 	};	
 }

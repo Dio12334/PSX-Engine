@@ -3,14 +3,11 @@
 
 #include "inputSystem.h"
 
-
 namespace psx {
 
 	class UserInput{
 		
 		public:
-			static bool Init(class InputSystem* system);
-			static void Shutdown();
 
 			static bool GetKeyValue(KeyCode keycode);
 			static ButtonState GetKeyState(KeyCode keycode);
@@ -21,10 +18,6 @@ namespace psx {
 			static bool IsRelative();
 			static bool GetButtonValue(MouseButton button);
 			static ButtonState GetButtonState(MouseButton button);
-
-
-		private:
-			static class InputSystem* s_inputSystem;
 	};
 }
 #endif

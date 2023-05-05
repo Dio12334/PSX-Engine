@@ -1,13 +1,11 @@
 #ifndef COMPONENTS_H
 #define COMPONENTS_H
 
-#include <glm/ext/matrix_transform.hpp>
 #include <string>
 #include <vector>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/quaternion.hpp>
-
+#include "sceneCamera.h"
 #include "../utils/psxint.h"
 
 namespace psx {
@@ -58,22 +56,25 @@ namespace psx {
 	};
 
 	struct CameraComponent{
-		class Renderer* renderer;
+		class SceneCamera camera;
+		bool Primary = true;
+		bool FixedAspectRatio = false;
 
-		CameraComponent(class Renderer* renderer): renderer(renderer){
-
-		} 
+		CameraComponent() = default;
+		CameraComponent(const CameraComponent&) = default;
 	};
 
 	class ScriptableEntity;
+
 	struct NativeScriptComponent{
 		std::vector<ScriptableEntity*> Instances;
-
 
 		template <typename T>
 		void Bind(){
 			Instances.push_back(static_cast<ScriptableEntity*>(new T()));
 		}
+
+		~NativeScriptComponent();
 	};
 }
 #endif

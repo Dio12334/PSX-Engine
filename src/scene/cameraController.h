@@ -15,12 +15,10 @@ namespace psx {
 			void OnUpdate(float dt) override {
 				auto& t = GetComponent<TransformComponent>();
 				float speed = 700.f;
-
 				
 				if(UserInput::GetKeyValue(KeyCode::A)){
 					t.Translation.x -= speed * dt;
 				}
-
 				if(UserInput::GetKeyValue(KeyCode::S)){
 					t.Translation.y -= speed * dt;
 				}
@@ -30,12 +28,22 @@ namespace psx {
 				if(UserInput::GetKeyValue(KeyCode::W) ){
 					t.Translation.y += speed * dt;
 				}
+
+				auto& c = GetComponent<CameraComponent>();
 				
-				auto renderer = GetComponent<CameraComponent>().renderer;
-				renderer->SetZoom(1.f);
-				auto wh = renderer->GetScreenDimensions();
-				renderer->SetViewMatrix(CreateTopDownViewMatrix(Vec2f(t.Translation.x, t.Translation.y), renderer->GetZoom(), wh.x, wh.y));
-				renderer->SetPosition(Vec2f(t.Translation.x, t.Translation.y));
+				auto scroll = UserInput::GetScrollWheel().y;
+				if(scroll){
+					int zoomStep = 20;
+					auto cameraZoom = c.camera.GetOrthographicSize();
+					if(scroll > 0){
+						cameraZoom = !(cameraZoom - zoomStep > 0)? 1: cameraZoom - zoomStep;
+					}
+					else{
+						cameraZoom += zoomStep;
+					}
+					c.camera.SetOrthographicSize(cameraZoom);
+				}
+				
 			}
 	};
 }

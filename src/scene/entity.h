@@ -33,6 +33,7 @@ namespace psx {
 			Scene* GetScene() const { return m_scene; }
 			
 			operator bool() const { return m_entityHandle != static_cast<entt::entity>(0); }
+			operator entt::entity() const { return m_entityHandle; }
 		private:
 			entt::entity m_entityHandle{entt::null};
 			Scene* m_scene = nullptr;

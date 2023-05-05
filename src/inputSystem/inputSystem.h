@@ -49,15 +49,15 @@ namespace psx {
 
 	class InputSystem{
 		public:
-			bool Initialize();
-			void Shutdown();
-			void PrepareForUpdate();
-			void Update();
-			const InputState& GetState() const { return m_state; }
-			void SetRelativeMouseMode(bool value);
-			void ProcessEvent(union ::SDL_Event& event);
+			static bool Initialize();
+			static void Shutdown();
+			static void PrepareForUpdate();
+			static void Update();
+			static const InputState& GetState() { return m_state; }
+			static void SetRelativeMouseMode(bool value);
+			static void ProcessEvent(union ::SDL_Event& event);
 		private:
-			InputState m_state;
+			static InputState m_state;
 
 	};
 

@@ -3,8 +3,6 @@
 #include <SOIL/SOIL.h>
 #include <SDL2/SDL_log.h>
 #include <GL/glew.h>
-#include <SDL2/SDL.h>
-#include <iostream>
 
 namespace psx {
 

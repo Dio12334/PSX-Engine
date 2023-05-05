@@ -46,7 +46,7 @@ namespace psx {
 			float m_perspectiveFOV = glm::radians(45.f);
 			float m_perspectiveNear = 0.01f, m_perspectiveFar = 1000.0f;
 
-			float m_orthographicSize = 10.f;
+			float m_orthographicSize = 100.f;
 			float m_orthographicNear = -1.f, m_orthographicFar = 10.f;
 
 			float m_aspectRatio = 0.f;

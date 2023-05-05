@@ -1,8 +1,6 @@
 #include "font.h"
 #include "texture.h"
-#include "../utils/psxcolor.h"
 #include "../engine/engine.h"
-#include <SDL2/SDL_ttf.h>
 
 namespace psx {
 	Font::Font(class Engine* engine): 

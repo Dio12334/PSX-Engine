@@ -50,9 +50,11 @@ namespace psx {
 			}
 		}
 	}
-	
+
+    InputState InputSystem::m_state;
+
 	bool InputSystem::Initialize(){
-		m_state.keyboard.m_currState = SDL_GetKeyboardState(NULL);
+		m_state.keyboard.m_currState = SDL_GetKeyboardState(nullptr);
 		memset(m_state.keyboard.m_prevState, 0, SDL_NUM_SCANCODES);
 		m_state.mouse.m_currButtons = 0;
 		m_state.mouse.m_prevButtons = 0;
