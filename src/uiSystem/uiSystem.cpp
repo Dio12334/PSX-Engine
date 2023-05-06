@@ -1,8 +1,11 @@
 #include "uiSystem.h"
 #include <GL/glew.h>
+
 namespace psx {
 
     ImGuiIO* UISystem::s_io = nullptr;
+	std::vector<UIWrapper> UISystem::m_uiStack;
+
 	void UISystem::Initialize(SDL_Window* window, SDL_GLContext context){
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -36,6 +39,22 @@ namespace psx {
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();
+	}
+
+    void UISystem::ShowScreens() {
+
+        for(auto screen: m_uiStack){
+            screen.ShowScreen();
+        }
+    }
+	
+	UIWrapper::UIWrapper(UIScreen* screen): m_screen(screen){
+		ShowScreen = [screen](){
+			screen->ShowScreen(); 
+			};
+	}
+
+	UIWrapper::~UIWrapper(){			
 	}
 
 }

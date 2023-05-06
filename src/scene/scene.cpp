@@ -4,6 +4,7 @@
 #include "scriptableEntity.h"
 #include "../renderer/renderer.h"
 #include "../uiSystem/uiSystem.h"
+#include <iostream>
 
 namespace psx {
 
@@ -36,8 +37,7 @@ namespace psx {
 
         //Update UI
         {
-
-
+            UISystem::ShowScreens();
         }
 
 		// Update scripts

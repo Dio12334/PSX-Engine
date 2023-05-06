@@ -22,7 +22,7 @@ namespace psx{
 				bungo.AddComponent<SpriteComponent>(Renderer::LoadTexture("assets/bungo.png"));
 				bungo.AddComponent<CameraComponent>();
 				bungo.AddComponent<NativeScriptComponent>().Bind<CameraController>();
-				/* bungo.GetComponent<NativeScriptComponent>().Bind<TestScript>(); */
+				bungo.GetComponent<NativeScriptComponent>().Bind<TestScript>();
 
 
 				bungo = CreateEntity("bungow??");
