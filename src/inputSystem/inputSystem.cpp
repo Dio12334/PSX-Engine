@@ -80,6 +80,7 @@ namespace psx {
 	}
 
 	void InputSystem::ProcessEvent(union ::SDL_Event &event){
+
 		switch(event.type){
 			case SDL_MOUSEWHEEL:
 				m_state.mouse.m_scrollWheel = Vec2(static_cast<float>(event.wheel.x), static_cast<float>(event.wheel.y));

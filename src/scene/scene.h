@@ -33,7 +33,7 @@ namespace psx{
 		protected:
 			u32 m_viewportWidth = 0, m_viewportHeight = 0;
 			entt::registry m_registry;
-			State inputState, updateState;
+			State m_inputState = State::sGameplay, m_updateState = State::sGameplay, m_prevInputState, m_prevUpdateState;
 			class Engine* m_engine;
 			friend class Entity;
 			friend class Renderer;

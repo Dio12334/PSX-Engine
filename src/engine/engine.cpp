@@ -107,7 +107,7 @@ namespace psx {
 		UISystem::StartFrame();
 		
 		//Demo window
-		/*ImGui::ShowDemoWindow();
+		ImGui::ShowDemoWindow(); 
 		ImGui::Begin("My Fixed-Size Window", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoTitleBar);
 		
 		ImGui::Text("Hello, world!");
@@ -117,7 +117,7 @@ namespace psx {
 			std::cout << "Button clicked!\n";
 		}
 
-		ImGui::End();*/
+		ImGui::End();
 
 		while(!SDL_TICKS_PASSED(SDL_GetTicks(), m_ticksCount + 16));
 		float deltaTime = (float)(SDL_GetTicks() - m_ticksCount)/1000.f;

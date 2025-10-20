@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include "scene.h"
+#include "components.h"
 
 namespace psx {
 
@@ -31,6 +32,8 @@ namespace psx {
 			}
 
 			Scene* GetScene() const { return m_scene; }
+
+			UUID GetUUID() { return GetComponent<IDComponent>().ID; }
 			
 			operator bool() const { return m_entityHandle != static_cast<entt::entity>(0); }
 			operator entt::entity() const { return m_entityHandle; }

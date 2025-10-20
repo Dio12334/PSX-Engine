@@ -29,11 +29,18 @@ namespace psx {
 	class UISystem{
 		public:
 			static void Initialize(SDL_Window* window, SDL_GLContext context);
-			static void ProcessEvent(SDL_Event* event);
+		
+			static bool ProcessEvent(SDL_Event* event);
 			static void StartFrame();
 			static void BeginRender();
 			static void EndRender();
 			static void Shutdown();
+
+
+			static bool IsGettingInputs();
+			static bool IsGettingMouseInputs();
+			static bool IsGettingKeyBoardInputs();
+			static bool IsHoveringAnyWindow();
 
             static void ShowScreens();
 		private:

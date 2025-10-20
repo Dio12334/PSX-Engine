@@ -12,12 +12,7 @@
 namespace psx {
 
 
-    class CharacterScreen;
 	class TestScript: public ScriptableEntity{
-		public:
-            void OnUpdate(float dt) override;
-            friend class CharacterScreen;
-	};
 
     class CharacterScreen: public UIScreen{
 
@@ -26,13 +21,33 @@ namespace psx {
 
             }
 
-        void ShowScreen() override;
+			void ShowScreen() override {
+				if(ImGui::Begin(m_windowName.c_str(), &is_open)){
+					auto& rotation = m_testScript.GetComponent<TransformComponent>().Rotation;
+					ImGui::SliderFloat("rotation",&rotation, 0, 2 * M_PI);
+					ImGui::End();
+					if(!is_open){
+						UIScreen::RemoveFromStack(*this);
+					}
+				}
+			}
 
         private:
             bool is_open = true;
             TestScript& m_testScript;
 
     };
+
+		public:
+            void OnUpdate(float dt) override{
+
+				if(UserInput::GetKeyValue(KeyCode::L)){
+					UIScreen::AddToStack<CharacterScreen>(*this);
+				}
+			}
+            
+	};
+
 }
 #endif
 

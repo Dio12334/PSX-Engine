@@ -22,6 +22,7 @@ namespace psx {
 		protected:
 			virtual void OnCreate() {}
 			virtual void OnDestroy() {}
+            virtual void OnInput() {}
 			virtual void OnUpdate(float dt) {}
 
 

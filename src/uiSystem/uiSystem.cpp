@@ -16,8 +16,8 @@ namespace psx {
 		ImGui_ImplOpenGL3_Init("#version 130");
 	}
 	
-	void UISystem::ProcessEvent(SDL_Event* event){
-		ImGui_ImplSDL2_ProcessEvent(event);
+	bool UISystem::ProcessEvent(SDL_Event* event){
+		return ImGui_ImplSDL2_ProcessEvent(event);
 	}
 	
 	void UISystem::StartFrame(){
@@ -57,4 +57,20 @@ namespace psx {
 	UIWrapper::~UIWrapper(){			
 	}
 
+
+	bool UISystem::IsGettingInputs(){
+		return IsGettingMouseInputs() || IsGettingKeyBoardInputs();
+	}
+
+	bool UISystem::IsGettingMouseInputs(){
+		return s_io->WantCaptureMouse;
+	}
+
+	bool UISystem::IsGettingKeyBoardInputs(){
+		return s_io->WantCaptureKeyboard;
+	}
+
+	bool UISystem::IsHoveringAnyWindow(){
+		return ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow);
+	}
 }

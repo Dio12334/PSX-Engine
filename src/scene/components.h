@@ -7,11 +7,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "sceneCamera.h"
 #include "../utils/psxint.h"
+#include "../core/uuid.h"
 
 namespace psx {
 
 	struct IDComponent{
+		UUID ID;
 
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
 	};
 
 	struct TransformComponent{

@@ -21,6 +21,7 @@ namespace psx {
 
 	Entity Scene::CreateEntity(const std::string& name){
 		Entity entity = {m_registry.create(), this };
+		entity.AddComponent<IDComponent>();	
 		entity.AddComponent<TransformComponent>();
 		auto& tag = entity.AddComponent<TagComponent>();
 		tag.Tag = name.empty()? "Entity": name;
@@ -40,7 +41,7 @@ namespace psx {
             UISystem::ShowScreens();
         }
 
-		// Update scripts
+		// Update scripts (this includes possible inputs)
 		{
 			m_registry.view<NativeScriptComponent>().each([=](auto entity, auto& nsc){
 
@@ -51,13 +52,19 @@ namespace psx {
 								instance->OnCreate();
 							}
 
-							instance->OnUpdate(dt);
+                            if(m_inputState == State::sGameplay) {
+                                instance->OnInput();
+                            }
+                            if(m_updateState == State::sGameplay) {
+                                instance->OnUpdate(dt);
+                            }
 						}
 				});
 		}
 
 		//Physics
-		{
+		// if state == gameplay
+        {
 				
 		}
 
@@ -113,4 +120,6 @@ namespace psx {
 				cameraComponent.camera.SetViewportSize(width, height);
 		}	
 	}
+
+
 }

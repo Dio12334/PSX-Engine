@@ -1,13 +1,13 @@
 BINARY=a.out # name of the binary
 CODEDIRS=. src/renderer src/engine src/inputSystem \
 		libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
-		src/uiSystem src/scene\
+		src/uiSystem src/scene src/core\
 		src/utils src/math libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .c/.cpp?
 INCDIRS= scr/utils/ src/math src/renderer src/engine src/inputSystem\
 		 src/scene libs/SDL_IMGUI/ libs/SDL_IMGUI/backends \
 		 libs/entt-3.11.1/single_include/entt/ \
-		 src/uiSystem \
+		 src/uiSystem src/core\
 		 libs/imgui-1.89.5 libs/imgui-1.89.5/backends
 		 # where are the .h/.hpp?
 
